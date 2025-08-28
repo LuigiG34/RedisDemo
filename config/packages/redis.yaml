@@ -1,0 +1,8 @@
+parameters:
+    redis_dsn: '%env(CACHE_DSN)%'
+
+services:
+    redis:
+        class: Redis
+        calls:
+            - [connect, ['%redis_dsn%']]
