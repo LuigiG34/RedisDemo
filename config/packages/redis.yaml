@@ -3,6 +3,12 @@ parameters:
 
 services:
     redis:
-        class: Redis
-        calls:
-            - [connect, ['%redis_dsn%']]
+        class: Predis\Client
+        arguments:
+            - '%redis_dsn%'
+
+    session.handler.redis:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+        arguments:
+            - '@redis'
+            - { prefix: 'sess_', ttl: 1800 } # adjust as you like
