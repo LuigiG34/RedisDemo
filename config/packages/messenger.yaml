@@ -1,6 +1,18 @@
 framework:
-    messenger:
-        transports:
-            async: '%env(MESSENGER_TRANSPORT_DSN)%'
-        routing:
-            # 'App\Message\TaskProcessMessage': async
+  messenger:
+    failure_transport: failed
+
+    transports:
+      async_high:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN_HIGH)%'
+
+      async:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+
+      async_low:
+        dsn: '%env(MESSENGER_TRANSPORT_DSN_LOW)%'
+
+      failed: 'doctrine://default?queue_name=failed&auto_setup=1'
+
+    routing:
+      App\Message\TaskProcessMessage: async
