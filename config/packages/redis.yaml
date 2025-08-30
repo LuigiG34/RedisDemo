@@ -2,13 +2,14 @@ parameters:
     redis_dsn: '%env(CACHE_DSN)%'
 
 services:
-    redis:
-        class: Predis\Client
-        arguments:
-            - '%redis_dsn%'
+    # Generic Redis connection ( if available "phpredis"; falls back to Predis)
+    .redis_connection:
+        class: Redis|Predis\Client
+        factory: ['Symfony\Component\Cache\Adapter\RedisAdapter', 'createConnection']
+        arguments: ['%redis_dsn%']
 
     session.handler.redis:
         class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
         arguments:
-            - '@redis'
-            - { prefix: 'sess_', ttl: 1800 } # adjust as you like
+            - '@.redis_connection'
+            - { prefix: 'sess_', ttl: 1800 } # 30 min

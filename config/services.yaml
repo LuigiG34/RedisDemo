@@ -22,3 +22,15 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    cache.task.tagaware:
+        class: Symfony\Component\Cache\Adapter\TagAwareAdapter
+        arguments:
+        - '@cache.task'
+
+    App\Service\TaskReadModel:
+        bind:
+            $taskCache: '@cache.task.tagaware'
+
+    App\EventSubscriber\TaskCacheInvalidationSubscriber:
+        bind:
+            $taskCache: '@cache.task.tagaware'
