@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Redis Demo - Task List</h1>
+    {% for flashMessage in app.flashes('info') %}
+        <div class="alert alert-info">{{ flashMessage }}</div>
+    {% endfor %}
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.name }} - Status: {{ task.status }} (Priority: {{ task.priority }})</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
