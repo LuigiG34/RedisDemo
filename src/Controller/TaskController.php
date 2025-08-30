@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Enum\QueuePriority;
+use App\Repository\TaskRepository;
+use App\Service\TaskQueue;
 use App\Service\TaskReadModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,5 +26,19 @@ final class TaskController extends AbstractController
         return $this->render('task/index.html.twig', [
             'tasks' => $tasks,
         ]);
+    }
+
+    #[Route('/dispatch-all', name: 'tasks_dispatch_by_db', methods: ['POST','GET'])]
+    public function dispatchAll(TaskRepository $repo, TaskQueue $queue): Response
+    {
+        $rows = $repo->createQueryBuilder('t')
+            ->select('t.id AS id, t.priority AS priority')
+            ->orderBy('t.id', 'ASC')
+            ->getQuery()
+            ->getScalarResult();
+
+        $queue->enqueueManyByRows($rows);
+
+        dd('success', sprintf('Dispatched %d tasks by DB priority.', \count($rows)));
     }
 }
