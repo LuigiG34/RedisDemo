@@ -57,6 +57,10 @@ A Symfony project demonstrating the use of Redis for caching, message queues, an
    ```
 *We have 1 worker that process from high → normal → low priority*
 
+10. Run tests (Optionnal)
+   ```
+   docker compose exec app ./bin/phpunit --testdox
+   ```
 ---
 
 ### About DTOs
