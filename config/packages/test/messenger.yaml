@@ -1,0 +1,7 @@
+framework:
+  messenger:
+    transports:
+      async_high: 'sync://'
+      async: 'sync://'
+      async_low: 'sync://'
+      failed: 'in-memory://'

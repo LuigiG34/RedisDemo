@@ -1,4 +1,8 @@
 framework:
-    cache:
-        app: cache.adapter.filesystem
-        system: cache.adapter.filesystem
+  cache:
+    app: cache.adapter.array
+    system: cache.adapter.array
+    pools:
+      cache.task:
+        adapter: cache.adapter.redis
+        provider: '%env(CACHE_DSN)%'

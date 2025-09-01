@@ -57,9 +57,10 @@ A Symfony project demonstrating the use of Redis for caching, message queues, an
    ```
 *We have 1 worker that process from high → normal → low priority*
 
-10. Run tests (Optionnal)
+10. Run tests + Create DB for tests (Optionnal)
    ```
-   docker compose exec app ./bin/phpunit --testdox
+   docker compose exec app php bin/console doctrine:database:create --env=test
+   docker compose exec app php ./bin/phpunit --testdox
    ```
 ---
 
