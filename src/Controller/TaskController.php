@@ -39,6 +39,6 @@ final class TaskController extends AbstractController
 
         $queue->enqueueManyByRows($rows);
 
-        dd('success', sprintf('Dispatched %d tasks by DB priority.', \count($rows)));
+        return new Response(sprintf('Success : Dispatched %d tasks by DB priority.', \count($rows)));
     }
 }
