@@ -5,18 +5,20 @@ namespace App\Tests\Functional;
 use App\Entity\Task;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class DispatchAllTest extends WebTestCase
 {
     private EntityManagerInterface $em;
+    private KernelBrowser $client;
 
     protected function setUp(): void
     {
         // Reset any previous Kernel state between tests
         self::ensureKernelShutdown(); 
         // Boots Kernel and gives us a BrowserKit client
-        self::createClient();
+        $this->client = self::createClient();
 
         // Fetch entity manager so we can create tables and insert data
         $this->em = self::getContainer()->get(EntityManagerInterface::class);
@@ -52,11 +54,8 @@ final class DispatchAllTest extends WebTestCase
      */
     public function testDispatchAllReturnsTextAndProcessesTasks(): void
     {
-        // Create the client for HTTP requests
-        $client = self::createClient();
-
         // GET the /tasks/dispatch-all URL
-        $client->request('GET', '/tasks/dispatch-all');
+        $this->client->request('GET', '/tasks/dispatch-all');
 
         // Assert status code is 2XX
         $this->assertResponseIsSuccessful();
@@ -64,7 +63,7 @@ final class DispatchAllTest extends WebTestCase
         // Assert the response body is exactly the one expected
         $this->assertSame(
             'Success : Dispatched 3 tasks by DB priority.',
-            trim($client->getResponse()->getContent())
+            trim($this->client->getResponse()->getContent())
         );
 
         // Detach all managed entities so next find hits the DB

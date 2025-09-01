@@ -17,8 +17,6 @@ final class MessageProcessingTest extends WebTestCase
     {
         // Reset any previous Kernel state between tests
         self::ensureKernelShutdown(); 
-        // Boots Kernel and gives us a BrowserKit client
-        self::createClient();
 
         // Fetch entity manager so we can create tables and insert data
         $this->em = self::getContainer()->get(EntityManagerInterface::class);
